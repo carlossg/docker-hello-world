@@ -19,7 +19,7 @@
 var http = require('http');
 var handleRequest = function (req, res) {
   res.writeHead(200);
-  res.end('Hello Kubernetes 1.0!');
+  res.end('Hello Kubernetes 2.0!');
 };
 var www = http.createServer(handleRequest);
 www.listen(process.env.PORT || 8080);
