@@ -22,6 +22,8 @@ podTemplate(label: 'deploy') {
       input message:'Approve upgrade?'
     }
     node('deploy') {
+      checkout scm
+      //git 'https://github.com/jenkinsci/kubernetes-plugin.git'
       kubernetesApply(file: readFile('kubernetes-hello-world-v2.yaml'), environment: 'kubernetes-plugin')
     }
   }
