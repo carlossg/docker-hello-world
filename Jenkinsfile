@@ -2,9 +2,9 @@
  * This pipeline will deploy to Kubernetes
  */
 
-library identifier: 'fabric8-pipeline-library@v2.2.311', retriever: modernSCM(
-  github(repoOwner: 'fabric8io', repository: 'fabric8-pipeline-library')
-)
+// JENKINS-45953 Loading libraries by tag no longer works in github-branch-source-plugin 2.2.3 :(
+// @Library("github.com/fabric8io/fabric8-pipeline-library@v2.2.311") _
+@Library("github.com/fabric8io/fabric8-pipeline-library@master") _
 
 podTemplate(label: 'deploy') {
 
