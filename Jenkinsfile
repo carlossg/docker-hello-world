@@ -1,5 +1,6 @@
 /**
  * This pipeline will deploy to Kubernetes
+ * Using https://github.com/jenkinsci/kubernetes-pipeline-plugin
  */
 
 // JENKINS-45953 Loading libraries by tag no longer works in github-branch-source-plugin 2.2.3 :(
