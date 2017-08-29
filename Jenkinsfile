@@ -1,20 +1,24 @@
 /**
  * This pipeline will deploy to Kubernetes
  * Using https://github.com/jenkinsci/kubernetes-pipeline-plugin
+ *
+ * kubernetesApply fails in a cluster with RBAC due to https://github.com/fabric8io/kubernetes-client/issues/850
  */
 
-// JENKINS-45953 Loading libraries by tag no longer works in github-branch-source-plugin 2.2.3 :(
-// @Library("github.com/fabric8io/fabric8-pipeline-library@v2.2.311") _
-@Library("github.com/fabric8io/fabric8-pipeline-library@master") _
-
-podTemplate(label: 'deploy') {
+podTemplate(label: 'deploy', serviceAccount: 'deployer', 
+    containers: [containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl', ttyEnabled: true, command: 'cat')]
+  ) {
 
   stage('deployment') {
     node('deploy') {
       checkout scm
       //git 'https://github.com/jenkinsci/kubernetes-plugin.git'
-      kubernetesApply(file: readFile('kubernetes-hello-world-service.yaml'), environment: 'kubernetes-plugin')
-      kubernetesApply(file: readFile('kubernetes-hello-world-v1.yaml'), environment: 'kubernetes-plugin')
+      container('kubectl') {
+        sh "kubectl apply -f kubernetes-hello-world-service.yaml"
+        sh "kubectl apply -f kubernetes-hello-world-v1.yaml"
+      }
+      // kubernetesApply(file: readFile('kubernetes-hello-world-service.yaml'), environment: 'kubernetes-plugin')
+      // kubernetesApply(file: readFile('kubernetes-hello-world-v1.yaml'), environment: 'kubernetes-plugin')
     }
   }
 
@@ -25,7 +29,10 @@ podTemplate(label: 'deploy') {
     node('deploy') {
       checkout scm
       //git 'https://github.com/jenkinsci/kubernetes-plugin.git'
-      kubernetesApply(file: readFile('kubernetes-hello-world-v2.yaml'), environment: 'kubernetes-plugin')
+      container('kubectl') {
+        sh "kubectl apply -f kubernetes-hello-world-v2.yaml"
+      }
+      // kubernetesApply(file: readFile('kubernetes-hello-world-v2.yaml'), environment: 'kubernetes-plugin')
     }
   }
 }
