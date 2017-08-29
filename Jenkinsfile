@@ -24,7 +24,7 @@ podTemplate(label: 'deploy', serviceAccount: 'deployer',
 
   stage('upgrade') {
     timeout(time:1, unit:'DAYS') {
-      input message:'Approve upgrade?'
+      input id: 'approve', message:'Approve upgrade?'
     }
     node('deploy') {
       checkout scm
