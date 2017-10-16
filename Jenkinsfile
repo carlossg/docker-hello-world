@@ -5,7 +5,7 @@
  * kubernetesApply fails in a cluster with RBAC due to https://github.com/fabric8io/kubernetes-client/issues/850
  */
 
-podTemplate(label: 'deploy', serviceAccount: 'deployer', 
+podTemplate(label: 'deploy', serviceAccount: 'deployer',
     containers: [containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl', ttyEnabled: true, command: 'cat')]
   ) {
 
@@ -23,7 +23,7 @@ podTemplate(label: 'deploy', serviceAccount: 'deployer',
   }
 
   stage('upgrade') {
-    timeout(time:1, unit:'DAYS') {
+    timeout(time:1, unit:'HOURS') {
       input id: 'approve', message:'Approve upgrade?'
     }
     node('deploy') {
